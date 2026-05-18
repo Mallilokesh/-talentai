@@ -61,7 +61,11 @@ export default function InsightsPage() {
               <span className="w-1.5 h-1.5 rounded-full bg-brand-600 pulse-dot" />
               AI insight — {industry}: {question}
             </div>
-            <AIBox text={insight} loading={loading} />
+            <AIBox
+              content={insight}
+              loading={loading}
+              label={`AI insight — ${industry}: ${question}`}
+            />
           </div>
         )}
 
