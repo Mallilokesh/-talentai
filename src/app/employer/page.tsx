@@ -112,7 +112,7 @@ export default function EmployerPage() {
                   <AIBox
                     content={evaluation}
                     loading={evalLoading}
-                    label={`AI evaluation — ${selectedCand.name}`}
+                    label={`AI evaluation — ${selectedCand?.name || 'Candidate'}`}
                   />
                 </div>
               )}
