@@ -13,6 +13,7 @@ export default function JobsPage() {
     name: 'Arjun Sharma', role: 'React Developer',
     experience: '4 years', location: 'Hyderabad, India',
     skills: 'React, Node.js, TypeScript, AWS, MongoDB', workType: 'Hybrid',
+    salaryExpectation: '₹18–25 LPA',
   })
   const [jobs, setJobs] = useState<JobMatch[]>([])
   const [loading, setLoading] = useState(false)
