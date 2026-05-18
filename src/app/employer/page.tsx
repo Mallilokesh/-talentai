@@ -162,7 +162,11 @@ export default function EmployerPage() {
                     <span className="w-1.5 h-1.5 rounded-full bg-brand-600 pulse-dot" />
                     AI evaluation — {selectedCand.name}
                   </div>
-                  <AIBox text={evaluation} loading={evalLoading} />
+                  <AIBox
+                    content={evaluation}
+                    loading={evalLoading}
+                    label={`AI evaluation — ${selectedCand?.name || 'Candidate'}`}
+                  />
                   <div className="mt-3 flex gap-2">
                     <button className="btn-primary text-xs px-3 py-1.5">Schedule interview</button>
                     <button className="btn-secondary text-xs px-3 py-1.5">View full profile</button>
