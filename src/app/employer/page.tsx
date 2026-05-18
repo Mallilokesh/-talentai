@@ -12,6 +12,7 @@ export default function EmployerPage() {
     title: 'Senior React Developer', company: 'Infosys',
     location: 'Hyderabad · Hybrid', salary: '₹28–38 LPA',
     skills: 'React, Node.js, AWS, 4+ years experience', description: '',
+    jobType: 'Full Time',
   })
   const [candidates, setCandidates] = useState<Candidate[]>([])
   const [loading, setLoading] = useState(false)
