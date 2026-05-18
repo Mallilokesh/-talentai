@@ -109,7 +109,11 @@ export default function EmployerPage() {
                     <span className="w-1.5 h-1.5 rounded-full bg-brand-600 pulse-dot" />
                     AI-optimized job description
                   </div>
-                  <AIBox text={jd} loading={jdLoading} />
+                  <AIBox
+                    content={jd}
+                    loading={jdLoading}
+                    label="AI-optimized job description"
+                  />
                 </div>
               )}
               {!jd && !jdLoading && (
