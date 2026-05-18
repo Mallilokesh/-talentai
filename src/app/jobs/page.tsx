@@ -121,7 +121,11 @@ export default function JobsPage() {
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-600 pulse-dot" />
                 AI career advisor — {selectedJob.title} at {selectedJob.company}
               </div>
-              <AIBox text={advice} loading={adviceLoading} />
+              <AIBox
+                content={advice}
+                loading={adviceLoading}
+                label={`AI career advisor — ${selectedJob.title} at ${selectedJob.company}`}
+              />
             </div>
           )}
         </section>
