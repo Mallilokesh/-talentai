@@ -110,9 +110,9 @@ export default function EmployerPage() {
                     AI-optimized job description
                   </div>
                   <AIBox
-                    content={jd}
-                    loading={jdLoading}
-                    label="AI-optimized job description"
+                    content={evaluation}
+                    loading={evalLoading}
+                    label={`AI evaluation — ${selectedCand.name}`}
                   />
                 </div>
               )}
