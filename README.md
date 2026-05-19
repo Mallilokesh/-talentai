@@ -1,108 +1,52 @@
 # TalentAI — AI-Powered Job Portal
 
-A full-stack job portal built with **Next.js 14**, **Tailwind CSS**, and **Claude AI** (Anthropic). Features AI job matching for seekers, AI candidate shortlisting for employers, and live market intelligence.
+Full-stack job portal built with **Next.js 14**, **Tailwind CSS**, and **Google Gemini AI** (free).
 
 ## Features
+- 🤖 AI Job Matching — scores every job against your profile
+- 👥 AI Candidate Shortlisting — rank candidates instantly  
+- 📝 AI Job Description Optimizer
+- 📊 AI Market Intelligence — salary, trends, skills
+- 🏢 Employer Dashboard
+- 💼 Job Seeker Dashboard
 
-- 🤖 **AI Job Matching** — Scores every job against your profile (skills, experience, location, preference)
-- 👥 **AI Candidate Shortlisting** — Employers get ranked candidates with AI evaluation in seconds
-- 📝 **AI Job Description Optimizer** — Generates polished JDs from bullet-point inputs
-- 📊 **AI Market Intelligence** — Real-time insights on salary, trends, and in-demand skills
-- 🏢 **Employer Dashboard** — Post jobs, find candidates, schedule interviews
-- 💼 **Job Seeker Dashboard** — Profile builder, match feed, application tracker
+## Quick Start
 
-## Tech Stack
-
-| Layer | Tech |
-|-------|------|
-| Framework | Next.js 14 (App Router) |
-| Styling | Tailwind CSS |
-| AI | Anthropic Claude (claude-sonnet-4) |
-| Deployment | Vercel |
-
-## Getting Started Locally
-
-### 1. Clone the repo
+### 1. Clone & install
 ```bash
 git clone https://github.com/YOUR_USERNAME/talentai.git
 cd talentai
-```
-
-### 2. Install dependencies
-```bash
 npm install
 ```
 
-### 3. Add your API key
+### 2. Add your FREE Gemini API key
 ```bash
 cp .env.local.example .env.local
-# Edit .env.local and add your Anthropic API key
-# Get one free at https://console.anthropic.com
+# Edit .env.local → add your key from https://aistudio.google.com
 ```
 
-### 4. Run the dev server
+### 3. Run locally
 ```bash
 npm run dev
 # Open http://localhost:3000
 ```
 
-## Deploy to Vercel (Free)
+## Deploy to Vercel
 
-### Option A — Vercel Dashboard (Recommended)
-1. Push this repo to GitHub
-2. Go to [vercel.com](https://vercel.com) → "Add New Project"
-3. Import your GitHub repo
-4. Under **Environment Variables**, add:
-   - `ANTHROPIC_API_KEY` = your key from [console.anthropic.com](https://console.anthropic.com)
-5. Click **Deploy** ✅
-
-### Option B — Vercel CLI
-```bash
-npm i -g vercel
-vercel
-# Follow prompts, then add env var in Vercel dashboard
-```
+1. Push to GitHub
+2. Go to [vercel.com](https://vercel.com) → Import project
+3. **Environment Variables** → Add:
+   - Name: `GEMINI_API_KEY`
+   - Value: your key from [aistudio.google.com](https://aistudio.google.com)
+4. Deploy ✅
 
 ## Push to GitHub
-
 ```bash
-git init
 git add .
-git commit -m "Initial commit — TalentAI"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/talentai.git
-git push -u origin main
+git commit -m "Fix: use Gemini API, add error handling"
+git push
 ```
+Vercel auto-deploys on every push.
 
-## Project Structure
-
-```
-talentai/
-├── src/
-│   ├── app/
-│   │   ├── page.tsx              # Home page
-│   │   ├── jobs/page.tsx         # Job seeker — AI matches
-│   │   ├── employer/page.tsx     # Employer dashboard
-│   │   ├── insights/page.tsx     # AI market intelligence
-│   │   ├── api/chat/route.ts     # All AI API calls (server-side)
-│   │   ├── layout.tsx
-│   │   └── globals.css
-│   ├── components/
-│   │   ├── ui/                   # MatchRing, AIBox, Avatar, LiveBadge
-│   │   └── layout/               # Navbar, Footer
-│   └── lib/
-│       └── types.ts              # TypeScript interfaces
-├── .env.local.example
-├── tailwind.config.js
-├── next.config.js
-└── package.json
-```
-
-## Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| `ANTHROPIC_API_KEY` | Your Anthropic API key (required) |
-
-## License
-MIT
+## Health check
+Visit `/api/health` on your deployed URL to verify the AI is connected.
