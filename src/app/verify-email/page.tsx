@@ -40,7 +40,3 @@ function VerifyContent() {
 
 export default function VerifyEmailPage() {
   return <Suspense fallback={<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}>Loading...</div>}><VerifyContent /></Suspense>
-}'''
-with open('src/app/verify-email/page.tsx', 'w') as f:
-    f.write(content)
-print('done')
