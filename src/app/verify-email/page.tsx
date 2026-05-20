@@ -1,5 +1,5 @@
-python -c "
-content = '''\"use client\"
+
+"use client"
 import { Suspense } from 'react'
 import { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -44,4 +44,3 @@ export default function VerifyEmailPage() {
 with open('src/app/verify-email/page.tsx', 'w') as f:
     f.write(content)
 print('done')
-"
