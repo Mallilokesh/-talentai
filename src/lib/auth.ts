@@ -30,7 +30,7 @@ DEMO.forEach(u => store.set(u.email.toLowerCase(), u))
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 export function getUser(email: string) { return store.get(email.toLowerCase()) }
-export function getAllUsers() { return [...store.values()] }
+export function getAllUsers() { return Array.from(store.values()) }
 
 export function createUser(data: Omit<User,'id'|'createdAt'>): User {
   if (store.has(data.email.toLowerCase())) throw new Error('Email already registered')
