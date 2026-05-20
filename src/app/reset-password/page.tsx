@@ -1,9 +1,10 @@
 'use client'
+import { Suspense } from 'react'
 import { useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-export default function ResetPasswordPage() {
+function ResetContent() {
   const params = useSearchParams()
   const router = useRouter()
   const [password, setPassword] = useState('')
@@ -23,7 +24,7 @@ export default function ResetPasswordPage() {
         body: JSON.stringify({ email: params.get('email'), token: params.get('token'), password }),
       })
       const data = await res.json()
-      if (data.success) { setSuccess(true); setTimeout(()=>router.push('/login'), 2500) }
+      if (data.success) { setSuccess(true); setTimeout(() => router.push('/login'), 2500) }
       else setError(data.error)
     } catch { setError('Network error.') }
     finally { setLoading(false) }
@@ -46,12 +47,11 @@ export default function ResetPasswordPage() {
             </div>
           ) : (
             <>
-              <h2 style={{fontSize:20,fontWeight:600,marginBottom:8,color:'#111827'}}>Set new password</h2>
-              <p style={{fontSize:14,color:'#6B7280',marginBottom:20}}>Choose a strong password for your account.</p>
+              <h2 style={{fontSize:20,fontWeight:600,marginBottom:8}}>Set new password</h2>
               {error && <div style={{background:'#FEF2F2',border:'1px solid #FCA5A5',color:'#DC2626',borderRadius:8,padding:'10px 14px',fontSize:13,marginBottom:16}}>{error}</div>}
               <form onSubmit={handleSubmit}>
-                <div style={{marginBottom:14}}><label style={{fontSize:12,color:'#6B7280',display:'block',marginBottom:5,fontWeight:500}}>New password</label><input type="password" style={inp} value={password} onChange={e=>setPassword(e.target.value)} placeholder="Min. 6 characters" required /></div>
-                <div style={{marginBottom:20}}><label style={{fontSize:12,color:'#6B7280',display:'block',marginBottom:5,fontWeight:500}}>Confirm password</label><input type="password" style={inp} value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat password" required /></div>
+                <div style={{marginBottom:14}}><label style={{fontSize:12,color:'#6B7280',display:'block',marginBottom:5}}>New password</label><input type="password" style={inp} value={password} onChange={e=>setPassword(e.target.value)} placeholder="Min. 6 characters" required /></div>
+                <div style={{marginBottom:20}}><label style={{fontSize:12,color:'#6B7280',display:'block',marginBottom:5}}>Confirm password</label><input type="password" style={inp} value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat password" required /></div>
                 <button type="submit" disabled={loading} style={{width:'100%',padding:'11px',background:'#185FA5',color:'#fff',border:'none',borderRadius:8,fontSize:15,fontWeight:500,cursor:'pointer',opacity:loading?0.6:1}}>
                   {loading?'Updating...':'Update password'}
                 </button>
@@ -65,4 +65,8 @@ export default function ResetPasswordPage() {
       </div>
     </div>
   )
+}
+
+export default function ResetPasswordPage() {
+  return <Suspense fallback={<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}>Loading...</div>}><ResetContent /></Suspense>
 }
