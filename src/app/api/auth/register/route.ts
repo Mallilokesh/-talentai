@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createUser, makeToken, signToken, safeUser } from '@/lib/auth'
+import { createUser, makeToken, safeUser } from '@/lib/auth'
 import { sendVerificationEmail } from '@/lib/email'
 
 export async function POST(req: NextRequest) {
@@ -14,11 +14,22 @@ export async function POST(req: NextRequest) {
 
     const verifyToken = makeToken()
     const user = createUser({ name, email, password, role, company, verified: false, verifyToken })
-    await sendVerificationEmail(email, name, verifyToken)
+
+    // Try to send email — if it fails, still create account
+    const emailSent = await sendVerificationEmail(email, name, verifyToken).catch(() => false)
+
+    const hasResend = !!process.env.RESEND_API_KEY
+    const message = hasResend && emailSent
+      ? `Account created! Check ${email} for a verification link.`
+      : `Account created! Since email is in dev mode, use the demo verify link below.`
 
     return NextResponse.json({
       success: true,
-      message: 'Account created! Please check your email to verify your account.',
+      message,
+      emailSent: hasResend && emailSent,
+      devMode: !hasResend,
+      // In dev mode, return the verify URL so user can click it directly
+      devVerifyUrl: !hasResend ? `/verify-email?token=${verifyToken}&email=${encodeURIComponent(email)}` : null,
       user: safeUser(user),
     })
   } catch (e: any) {

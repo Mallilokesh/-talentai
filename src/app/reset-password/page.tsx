@@ -1,6 +1,5 @@
 'use client'
-import { Suspense } from 'react'
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -25,35 +24,36 @@ function ResetContent() {
       })
       const data = await res.json()
       if (data.success) { setSuccess(true); setTimeout(() => router.push('/login'), 2500) }
-      else setError(data.error)
-    } catch { setError('Network error.') }
+      else setError(data.error || 'Failed to reset password.')
+    } catch { setError('Network error. Please try again.') }
     finally { setLoading(false) }
   }
 
   const inp = {width:'100%',padding:'9px 12px',fontSize:14,border:'1px solid #E5E7EB',borderRadius:8,outline:'none',boxSizing:'border-box' as const}
 
   return (
-    <div style={{minHeight:'100vh',background:'#F3F4F6',display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#EFF6FF,#F9FAFB)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
       <div style={{width:'100%',maxWidth:420}}>
         <div style={{textAlign:'center',marginBottom:28}}>
-          <div style={{fontSize:30,fontWeight:600,color:'#185FA5'}}>Talent<span style={{color:'#9CA3AF',fontWeight:400}}>AI</span></div>
+          <Link href="/" style={{textDecoration:'none'}}><div style={{fontSize:30,fontWeight:700,color:'#185FA5'}}>Talent<span style={{color:'#9CA3AF',fontWeight:400}}>AI</span></div></Link>
         </div>
-        <div style={{background:'#fff',borderRadius:16,padding:28,boxShadow:'0 2px 8px rgba(0,0,0,0.07)',border:'1px solid #E5E7EB'}}>
+        <div style={{background:'#fff',borderRadius:20,padding:28,boxShadow:'0 4px 20px rgba(0,0,0,0.08)',border:'1px solid #E5E7EB'}}>
           {success ? (
             <div style={{textAlign:'center',padding:'16px 0'}}>
-              <div style={{fontSize:40,marginBottom:12}}>✅</div>
+              <div style={{fontSize:48,marginBottom:12}}>✅</div>
               <h2 style={{color:'#166534',marginBottom:8}}>Password updated!</h2>
               <p style={{color:'#6B7280',fontSize:14}}>Redirecting to login...</p>
             </div>
           ) : (
             <>
-              <h2 style={{fontSize:20,fontWeight:600,marginBottom:8}}>Set new password</h2>
+              <h2 style={{fontSize:20,fontWeight:600,marginBottom:8,color:'#111827'}}>Set new password</h2>
+              <p style={{fontSize:14,color:'#6B7280',marginBottom:20}}>Choose a strong password for your account.</p>
               {error && <div style={{background:'#FEF2F2',border:'1px solid #FCA5A5',color:'#DC2626',borderRadius:8,padding:'10px 14px',fontSize:13,marginBottom:16}}>{error}</div>}
               <form onSubmit={handleSubmit}>
-                <div style={{marginBottom:14}}><label style={{fontSize:12,color:'#6B7280',display:'block',marginBottom:5}}>New password</label><input type="password" style={inp} value={password} onChange={e=>setPassword(e.target.value)} placeholder="Min. 6 characters" required /></div>
-                <div style={{marginBottom:20}}><label style={{fontSize:12,color:'#6B7280',display:'block',marginBottom:5}}>Confirm password</label><input type="password" style={inp} value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat password" required /></div>
-                <button type="submit" disabled={loading} style={{width:'100%',padding:'11px',background:'#185FA5',color:'#fff',border:'none',borderRadius:8,fontSize:15,fontWeight:500,cursor:'pointer',opacity:loading?0.6:1}}>
-                  {loading?'Updating...':'Update password'}
+                <div style={{marginBottom:14}}><label style={{fontSize:12,color:'#6B7280',display:'block',marginBottom:5,fontWeight:500}}>New password</label><input type="password" style={inp} value={password} onChange={e=>setPassword(e.target.value)} placeholder="Min. 6 characters" required /></div>
+                <div style={{marginBottom:20}}><label style={{fontSize:12,color:'#6B7280',display:'block',marginBottom:5,fontWeight:500}}>Confirm password</label><input type="password" style={inp} value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Repeat password" required /></div>
+                <button type="submit" disabled={loading} style={{width:'100%',padding:'12px',background:'#185FA5',color:'#fff',border:'none',borderRadius:8,fontSize:15,fontWeight:600,cursor:'pointer',opacity:loading?0.6:1}}>
+                  {loading ? 'Updating...' : 'Update password →'}
                 </button>
               </form>
             </>
@@ -68,5 +68,9 @@ function ResetContent() {
 }
 
 export default function ResetPasswordPage() {
-  return <Suspense fallback={<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}>Loading...</div>}><ResetContent /></Suspense>
+  return (
+    <Suspense fallback={<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}><p style={{color:'#6B7280'}}>Loading...</p></div>}>
+      <ResetContent />
+    </Suspense>
+  )
 }
