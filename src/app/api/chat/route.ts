@@ -4,13 +4,11 @@ async function callAI(prompt: string, system?: string): Promise<string> {
   const groqKey = process.env.GROQ_API_KEY
   const geminiKey = process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY
 
-  // 1. Try Groq first (free, 14400 req/day, no quota issues)
   if (groqKey) {
     try {
       const messages: any[] = []
       if (system) messages.push({ role: 'system', content: system })
       messages.push({ role: 'user', content: prompt })
-
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Authorization': 'Bearer ' + groqKey, 'Content-Type': 'application/json' },
@@ -24,7 +22,6 @@ async function callAI(prompt: string, system?: string): Promise<string> {
     } catch (e) { console.log('Groq error:', e) }
   }
 
-  // 2. Fallback to Gemini
   if (geminiKey) {
     const full = system ? system + '\n\n' + prompt : prompt
     for (const model of ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.0-pro']) {
@@ -39,7 +36,7 @@ async function callAI(prompt: string, system?: string): Promise<string> {
           const text = d.candidates?.[0]?.content?.parts?.[0]?.text
           if (text) return text
         }
-      } catch (e) { console.log('Gemini error:', model, e) }
+      } catch (e) { console.log('Gemini error:', e) }
     }
   }
 
@@ -62,19 +59,19 @@ export async function POST(req: NextRequest) {
     if (type === 'job-matches') {
       const { name, role, experience, location, skills, workType } = payload
       const raw = await callAI(
-        'Match exactly 4 jobs for this candidate. Return ONLY a JSON array, no markdown.\nCandidate: ' + name + ', ' + role + ', ' + experience + ', ' + location + ', skills: ' + skills + ', prefers: ' + workType + '\nEach object: {"title":"","company":"","location":"","salary":"₹20-30 LPA","matchScore":85,"tags":["s1","s2","s3"],"reason":"one sentence","jobType":"Full-time"}',
-        'You are an AI job matcher. Return ONLY valid JSON arrays. No markdown. No extra text.'
+        'Match exactly 4 jobs for: ' + name + ', ' + role + ', ' + experience + ', ' + location + ', skills: ' + skills + ', prefers: ' + workType + '. Return ONLY a JSON array. Each: {"title":"","company":"","location":"","salary":"₹20-30 LPA","matchScore":85,"tags":["s1","s2","s3"],"reason":"one sentence","jobType":"Full-time"}',
+        'You are an AI job matcher. Return ONLY valid JSON arrays. No markdown.'
       )
       const data = parseJSON(raw)
-      if (!data.length) return NextResponse.json({ error: 'AI returned invalid data. Please try again.' }, { status: 500 })
+      if (!data.length) return NextResponse.json({ error: 'Try again' }, { status: 500 })
       return NextResponse.json({ data })
     }
 
     if (type === 'job-advice') {
       const { candidateName, skills, experience, job } = payload
       const data = await callAI(
-        'Give ' + candidateName + ' (' + experience + ', skills: ' + skills + ') 3-4 sentences of career advice about applying to "' + job.title + '" at ' + job.company + ' (' + job.salary + '). Cover: why good fit, key strength, one tip to stand out.',
-        'You are a direct and encouraging career advisor.'
+        'Give ' + candidateName + ' (' + experience + ', skills: ' + skills + ') 3-4 sentences of advice about "' + job.title + '" at ' + job.company + '. Cover: fit, strength, tip.',
+        'You are a direct career advisor.'
       )
       return NextResponse.json({ data })
     }
@@ -82,19 +79,19 @@ export async function POST(req: NextRequest) {
     if (type === 'candidates') {
       const { title, company, location, salary, skills } = payload
       const raw = await callAI(
-        'Generate exactly 5 Indian candidate profiles. Return ONLY a JSON array, no markdown.\nJob: ' + title + ' at ' + company + ', ' + location + ', ' + salary + '. Requirements: ' + skills + '\nEach: {"name":"Indian name","currentRole":"","experience":"5 years","location":"Indian city","matchScore":88,"skills":["s1","s2","s3"],"summary":"one sentence"}',
+        'Generate 5 Indian candidates for: ' + title + ' at ' + company + ', ' + location + ', ' + salary + '. Requirements: ' + skills + '. Return ONLY a JSON array. Each: {"name":"Indian name","currentRole":"","experience":"5 years","location":"city","matchScore":88,"skills":["s1","s2","s3"],"summary":"one sentence"}',
         'You are an AI talent sourcer. Return ONLY valid JSON arrays. No markdown.'
       )
       const data = parseJSON(raw)
-      if (!data.length) return NextResponse.json({ error: 'AI returned invalid data. Please try again.' }, { status: 500 })
+      if (!data.length) return NextResponse.json({ error: 'Try again' }, { status: 500 })
       return NextResponse.json({ data })
     }
 
     if (type === 'candidate-eval') {
       const { candidate, job } = payload
       const data = await callAI(
-        'Evaluate "' + candidate.name + '" (' + candidate.currentRole + ', ' + candidate.experience + ', skills: ' + (candidate.skills || []).join(', ') + ') for "' + job.title + '" requiring "' + job.skills + '". Write 3-4 sentences: fit rating, strongest skill, any gap, recommendation (Strong Yes / Yes / Maybe / Pass).',
-        'You are a direct AI recruiter evaluator.'
+        'Evaluate ' + candidate.name + ' (' + candidate.currentRole + ', ' + candidate.experience + ', skills: ' + (candidate.skills || []).join(', ') + ') for ' + job.title + '. 3-4 sentences: fit, strength, gap, recommendation (Strong Yes/Yes/Maybe/Pass).',
+        'You are a direct AI recruiter.'
       )
       return NextResponse.json({ data })
     }
@@ -102,7 +99,7 @@ export async function POST(req: NextRequest) {
     if (type === 'optimize-jd') {
       const { title, company, location, salary, skills } = payload
       const data = await callAI(
-        'Write a compelling job description (max 160 words) for: ' + title + ' at ' + company + ', ' + location + ', ' + salary + '. Requirements: ' + skills + '. Format: 2-sentence intro, "What you\'ll do:" with 3 bullets, "What we\'re looking for:" with 3 bullets.',
+        'Write job description (max 160 words) for: ' + title + ' at ' + company + ', ' + location + ', ' + salary + '. Requirements: ' + skills + '. Format: 2-sentence intro, 3 responsibilities, 3 requirements.',
         'You are a world-class HR copywriter.'
       )
       return NextResponse.json({ data })
@@ -111,20 +108,17 @@ export async function POST(req: NextRequest) {
     if (type === 'market-insight') {
       const { industry, question } = payload
       const data = await callAI(
-        'Answer for the "' + industry + '" sector in India: "' + question + '". Write 5-6 sentences with specific numbers, company names, and skills. Focus on actionable insights for someone in India in 2025.',
-        'You are an expert Indian labor market analyst with deep 2025 knowledge.'
+        'Indian job market 2025. For "' + industry + '": "' + question + '". Write 5-6 sentences with numbers, companies, skills.',
+        'You are an expert Indian labor market analyst.'
       )
       return NextResponse.json({ data })
     }
 
-    return NextResponse.json({ error: 'Unknown request type: ' + type }, { status: 400 })
+    return NextResponse.json({ error: 'Unknown type' }, { status: 400 })
 
   } catch (err: any) {
-    console.error('API error:', err.message)
     if (err.message === 'ALL_MODELS_FAILED')
-      return NextResponse.json({
-        error: 'AI quota exceeded. Get a free Groq key at console.groq.com and add GROQ_API_KEY in Vercel settings.',
-      }, { status: 503 })
+      return NextResponse.json({ error: 'AI unavailable. Add GROQ_API_KEY in Vercel settings (free at console.groq.com).' }, { status: 503 })
     return NextResponse.json({ error: err.message || 'Server error' }, { status: 500 })
   }
 }
