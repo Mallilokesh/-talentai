@@ -1,48 +1,53 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 async function callAI(prompt: string, system?: string): Promise<string> {
-  const key = process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY
-  if (!key) throw new Error('NO_API_KEY')
+  const groqKey = process.env.GROQ_API_KEY
+  const geminiKey = process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY
 
-  const full = system ? `${system}\n\n${prompt}` : prompt
-
-  const models = [
-    'gemini-2.5-flash-preview-05-20',
-    'gemini-2.0-flash',
-    'gemini-2.0-flash-lite',
-    'gemini-1.5-flash',
-    'gemini-1.5-flash-8b',
-    'gemini-1.0-pro',
-  ]
-
-  for (const model of models) {
+  // Try Groq first (free, fast, no quota issues)
+  if (groqKey) {
     try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: full }] }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
-          }),
-        }
-      )
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'llama3-8b-8192',
+          messages: [
+            ...(system ? [{ role: 'system', content: system }] : []),
+            { role: 'user', content: prompt }
+          ],
+          max_tokens: 1024,
+        }),
+      })
       if (res.ok) {
         const d = await res.json()
-        const text = d.candidates?.[0]?.content?.parts?.[0]?.text
+        const text = d.choices?.[0]?.message?.content
         if (text) return text
-      } else {
-        const err = await res.json().catch(() => ({}))
-        console.log(`Model ${model} failed:`, err?.error?.message || res.status)
       }
-    } catch (e) {
-      console.log(`Model ${model} threw:`, e)
+    } catch {}
+  }
+
+  // Fallback to Gemini
+  if (geminiKey) {
+    const full = system ? `${system}\n\n${prompt}` : prompt
+    for (const model of ['gemini-2.0-flash','gemini-1.5-flash','gemini-1.0-pro']) {
+      try {
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`,
+          { method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ contents:[{ parts:[{ text: full }] }] }) }
+        )
+        if (res.ok) {
+          const d = await res.json()
+          const text = d.candidates?.[0]?.content?.parts?.[0]?.text
+          if (text) return text
+        }
+      } catch {}
     }
   }
+
   throw new Error('ALL_MODELS_FAILED')
 }
-
 function parseJSON(text: string): any[] {
   try {
     const clean = text.replace(/```json|```/g, '').trim()
