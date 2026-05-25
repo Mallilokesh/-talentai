@@ -11,10 +11,10 @@ import type { JobMatch, SeekerProfile } from '@/lib/types'
 
 export default function JobsPage() {
   const [profile, setProfile] = useState<SeekerProfile>({
-    name: 'Arjun Sharma', role: 'React Developer',
-    experience: '4 years', location: 'Hyderabad, India',
-    skills: 'React, Node.js, TypeScript, AWS, MongoDB', workType: 'Hybrid',
-  })
+  name: 'Arjun Sharma', role: 'React Developer',
+  experience: '4 years', location: 'Hyderabad, India',
+  skills: 'React, Node.js, TypeScript, AWS, MongoDB', workType: 'Hybrid',
+})
   const [jobs, setJobs] = useState<JobMatch[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
