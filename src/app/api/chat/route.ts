@@ -16,7 +16,7 @@ async function callAI(prompt: string, system?: string): Promise<string> {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: 'llama3-8b-8192',
+      model: 'llama-3.1-8b-instant',
       messages,
       max_tokens: 1024,
       temperature: 0.7,
