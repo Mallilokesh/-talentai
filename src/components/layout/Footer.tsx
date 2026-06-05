@@ -7,7 +7,7 @@ export default function Footer() {
         <div style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr',gap:32,marginBottom:32}}>
           <div>
             <div style={{fontSize:22,fontWeight:700,color:'#185FA5',marginBottom:8}}>Talent<span style={{color:'#9CA3AF',fontWeight:400}}>AI</span></div>
-            <p style={{fontSize:13,color:'#6B7280',lineHeight:1.7,maxWidth:220}}>AI-powered job matching for seekers and employers. Built with Next.js and Google Gemini AI.</p>
+            <p style={{fontSize:13,color:'#6B7280',lineHeight:1.7,maxWidth:220}}>AI-powered job matching for seekers and employers. Built with Next.js and Groq AI (Llama 3.1).</p>
           </div>
           <div>
             <div style={{fontSize:13,fontWeight:600,color:'#111827',marginBottom:12}}>For Job Seekers</div>
@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
         </div>
         <div style={{borderTop:'1px solid #E5E7EB',paddingTop:20,display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:12}}>
-          <p style={{fontSize:12,color:'#9CA3AF'}}>© {new Date().getFullYear()} TalentAI. Built with Next.js 14 + Google Gemini AI.</p>
+          <p style={{fontSize:12,color:'#9CA3AF'}}>© {new Date().getFullYear()} TalentAI. Built with Next.js 14 + Groq AI (Llama 3.1).</p>
           <div style={{display:'flex',gap:16}}>
             <span style={{fontSize:12,color:'#9CA3AF'}}>🛡️ Privacy First</span>
             <span style={{fontSize:12,color:'#9CA3AF'}}>⚡ AI-Powered</span>
