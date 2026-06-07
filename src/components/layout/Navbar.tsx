@@ -33,14 +33,6 @@ export default function Navbar() {
           ))}
         </nav>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
-  <div style={{position:'relative',cursor:'pointer'}}>
-    <i className="ti ti-bell" style={{fontSize:18,color:'#6B7280'}} aria-hidden="true"></i>
-    <span style={{position:'absolute',top:-3,right:-3,width:7,height:7,background:'#E24B4A',borderRadius:'50%',border:'1.5px solid #fff'}}></span>
-  </div>
-  <div style={{position:'relative',cursor:'pointer'}}>
-    <i className="ti ti-bell" style={{fontSize:18,color:'#6B7280'}} aria-hidden="true"></i>
-    <span style={{position:'absolute',top:-3,right:-3,width:7,height:7,background:'#E24B4A',borderRadius:'50%',border:'1.5px solid #fff'}}></span>
-  </div>
           <span style={{display:'flex',alignItems:'center',gap:5,fontSize:12,fontWeight:500,color:'#185FA5',background:'#EFF6FF',padding:'4px 10px',borderRadius:20}}>
             <span style={{width:6,height:6,borderRadius:'50%',background:'#185FA5',display:'inline-block'}}></span>Live AI
           </span>
