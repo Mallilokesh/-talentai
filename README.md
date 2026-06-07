@@ -47,6 +47,8 @@ git commit -m "Fix: use Gemini API, add error handling"
 git push
 ```
 Vercel auto-deploys on every push.
+Live website link-https://talentai-pied.vercel.app/jobs
+
 
 ## Health check
 Visit `/api/health` on your deployed URL to verify the AI is connected.
