@@ -8,7 +8,7 @@ import Footer from '@/components/layout/Footer'
     <div style={{fontSize:24,fontWeight:700,color:'#185FA5'}}>{n}</div>
     <div style={{fontSize:13,color:'#6B7280',marginTop:4}}>{l}</div>
   </div>
-))},['12,500+','Companies hiring'],['94%','AI match accuracy'],['2.4M+','Registered users']]
+const stats = [['💼','48,200+','Active listings'],['🏢','12,500+','Companies'],['🤖','94%','AI accuracy'],['👥','2.4M+','Users']]['94%','AI match accuracy'],['2.4M+','Registered users']]
 const categories = [['💻','Engineering','18,400'],['📊','Finance','6,200'],['🏥','Healthcare','9,100'],['🎨','Design','4,300'],['📣','Marketing','5,600'],['🏗️','Operations','7,800']]
 const features = [
   ['🤖','AI Job Matching','Scores every job against your profile with up to 98% accuracy using skill, experience, and culture-fit analysis.'],
@@ -43,9 +43,13 @@ export default function HomePage() {
         {/* Stats */}
         <section style={{background:'#fff',borderBottom:'1px solid #E5E7EB',padding:'32px 16px'}}>
           <div style={{maxWidth:800,margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:24,textAlign:'center'}}>
-            {stats.map(([n,l])=>(
-              <div key={l}><div style={{fontSize:26,fontWeight:700,color:'#185FA5'}}>{n}</div><div style={{fontSize:13,color:'#6B7280',marginTop:4}}>{l}</div></div>
-            ))}
+           {stats.map(([ic,n,l])=>(
+  <div key={l} style={{textAlign:'center'}}>
+    <div style={{fontSize:24,marginBottom:4}}>{ic}</div>
+    <div style={{fontSize:26,fontWeight:700,color:'#185FA5'}}>{n}</div>
+    <div style={{fontSize:13,color:'#6B7280',marginTop:4}}>{l}</div>
+  </div>
+))}
           </div>
         </section>
 
