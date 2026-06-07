@@ -92,18 +92,6 @@ export default function JobsPage() {
             </div>
           </aside>
           <section className="md:col-span-3 space-y-3">
-            <div style={{background:'#E6F1FB',border:'0.5px solid #B5D4F4',borderRadius:12,padding:'12px 16px',display:'flex',gap:10,alignItems:'flex-start',marginBottom:4}}>
-  <span style={{fontSize:20,color:'#185FA5',flexShrink:0}}>🤖</span>
-  <div>
-    <div style={{fontSize:12,fontWeight:500,color:'#185FA5',marginBottom:2}}>AI insight for your profile</div>
-    <div style={{fontSize:13,color:'#0C447C',lineHeight:1.6}}>Fill your profile and click Find AI job matches to get personalized recommendations with match scores.</div>
-  </div>
-</div>
-<div style={{display:'flex',gap:6,flexWrap:'wrap' as const,marginBottom:8}}>
-  {['All','Remote','Full-time','Hybrid','Senior','MNC'].map((f,i)=>(
-    <span key={f} style={{padding:'5px 12px',borderRadius:20,fontSize:12,border:'0.5px solid #E5E7EB',background:i===0?'#185FA5':'#fff',color:i===0?'#fff':'#6B7280',cursor:'pointer'}}>{f}</span>
-  ))}
-</div>
             {loading && (
               <div className="card text-center py-12">
                 <Brain size={32} className="mx-auto mb-3 text-brand-600 animate-pulse" />
