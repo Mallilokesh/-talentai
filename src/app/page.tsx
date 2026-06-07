@@ -2,7 +2,13 @@ import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 
-const stats = [['48,200+','Active job listings'],['12,500+','Companies hiring'],['94%','AI match accuracy'],['2.4M+','Registered users']]
+{[['💼','48,200+','Active listings'],['🏢','12,500+','Companies'],['🤖','94%','AI accuracy'],['👥','2.4M+','Users']].map(([ic,n,l])=>(
+  <div key={l} style={{textAlign:'center'}}>
+    <div style={{fontSize:24,marginBottom:4}}>{ic}</div>
+    <div style={{fontSize:24,fontWeight:700,color:'#185FA5'}}>{n}</div>
+    <div style={{fontSize:13,color:'#6B7280',marginTop:4}}>{l}</div>
+  </div>
+))},['12,500+','Companies hiring'],['94%','AI match accuracy'],['2.4M+','Registered users']]
 const categories = [['💻','Engineering','18,400'],['📊','Finance','6,200'],['🏥','Healthcare','9,100'],['🎨','Design','4,300'],['📣','Marketing','5,600'],['🏗️','Operations','7,800']]
 const features = [
   ['🤖','AI Job Matching','Scores every job against your profile with up to 98% accuracy using skill, experience, and culture-fit analysis.'],
